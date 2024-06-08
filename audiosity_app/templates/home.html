@@ -1,0 +1,28 @@
+<!-- home.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+
+<div class="navbar">
+    <a class="active" href="#home">Home</a>
+    <a href="{% url 'lyrics_analysis' %}">Lyrics Analyse</a>
+    <a href="{% url 'lyrics2image' %}">Lyrics zu Bild</a>
+    <a href="{% url 'image2lyrics' %}">Bild zu Lyrics</a>
+</div>
+
+<div class="background-container"></div>
+
+<div class="text-box">
+    <h1>Welcome to Audiosity!</h1>
+    <p>This is the homepage of the Audiosity app.</p>
+</div>
+
+</body>
+</html>
