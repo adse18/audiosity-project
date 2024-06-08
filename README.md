@@ -1,4 +1,4 @@
-# vAudiosity Project
+# Audiosity Project
 
 vAudiosity Project is a multifaceted application designed to analyze and explore music in various creative ways.
 
