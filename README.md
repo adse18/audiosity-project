@@ -14,4 +14,4 @@ Another exciting feature of vAudiosity Project is the ability to generate images
 
 Additionally, users can upload an image and receive a perfect matching song based on its content. This innovative feature combines image recognition technology with music recommendation algorithms to offer personalized music suggestions.
 
-vAudiosity Project provides a unique and immersive way to interact with music, offering both analytical insights and creative exploration opportunities.
+Audiosity Project provides a unique and immersive way to interact with music, offering both analytical insights and creative exploration opportunities.
