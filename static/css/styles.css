@@ -40,7 +40,7 @@ body {
 /* Heading styles */
 h1, h2, h3 {
     margin-bottom: 20px;
-    color: #ec3333;
+    color: #e82020;
 }
 
 /* Button styles */
@@ -104,4 +104,39 @@ h1, h2, h3 {
 }
 .step-links span.current {
     font-weight: bold;
+}
+
+.modal-dialog {
+    display: flex;
+    white-space: pre-wrap; /* Wrap the text */
+    word-wrap: break-word; /* Break long words */
+    overflow-wrap: break-word; /* Break long words */
+    background-color: #f8f9fa; /* Optional: match the modal body background */
+    padding: 15px; /* Optional: add padding for better readability */
+    border-radius: 5px; /* Optional: round the corners */
+    color: red; /* Make the text red */
+}
+
+.pop-up:pre-line{
+    display: flex;
+    word-wrap: break-word;
+    overflow-wrap: break-word; /* For better browser support */
+    white-space: pre-wrap;
+    flex: 1; /* Allow the <pre> element to grow and take up remaining space */
+}
+.modal-body pre{
+    display: flex;
+    word-wrap: break-word;
+    overflow-wrap: break-word; /* For better browser support */
+    white-space: pre-wrap;
+    flex: 1; /* Allow the <pre> element to grow and take up remaining space */
+}
+.modal-body .pop-up {
+    white-space: pre-wrap; /* Preserve white spaces and wrap text */
+    word-wrap: break-word; /* Break long words */
+    overflow-wrap: break-word; /* Break long words for better browser support */
+    color: red; /* Make text red */
+    background-color: #f8f9fa; /* Optional: background color */
+    padding: 15px; /* Optional: padding */
+    border-radius: 5px; /* Optional: rounded corners */
 }
