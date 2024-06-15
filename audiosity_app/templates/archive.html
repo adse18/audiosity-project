@@ -9,8 +9,8 @@
 </head>
 <body>
     <h1>Search Songs</h1>
-    <form method="GET" action="{% url 'search_songs' %}">
-        <input type="text" name="q" placeholder="Search for songs..." required>
+    <form method="GET" action="{% url 'archive' %}">
+        <input type="text" name="q" placeholder="Search for songs..." value="{{ query }}" required>
         <button type="submit">Search</button>
     </form>
     
@@ -18,7 +18,7 @@
         <h2>Search Results:</h2>
         <ul>
             {% for song in page_obj %}
-                <li>{{ song.title }} by {{ song.artist }} ({{ song.year }})</li>
+                <li>{{ song.song_title }} by {{ song.artist }} ({{ song.year }})</li>
             {% endfor %}
         </ul>
 
