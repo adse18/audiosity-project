@@ -1,3 +1,4 @@
+<!-- archive.htlm -->
 {% extends 'base.html' %}
 {% load static %}
 
@@ -11,40 +12,52 @@
         <button type="submit">Search</button>
     </form>
 
-    <ul>
-        {% for song in page_obj %}
-            <li>
-                <a href="#" class="song-title"
-                   data-toggle="modal"
-                   data-target="#lyricsModal{{ song.id }}"
-                   data-song-id="{{ song.id }}"
-                   data-song-title="{{ song.song_title }}"
-                   data-artist="{{ song.artist }}"
-                   data-lyrics="{{ song.lyrics }}">
-                    {{ song.song_title }}
-                </a>  by {{ song.artist }} ({{ song.year }})
-            </li>
-    <div class="modal fade" id="lyricsModal{{ song.id }}" tabindex="-1" role="dialog" aria-labelledby="lyricsModalLabel{{ song.id }}" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="lyricsModalLabel{{ song.id }}">Lyrics for {{ song.song_title }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+    {% if page_obj.paginator.count == 0 %}
+    <p></p>
+    <p><b>No results found.</b></p>
+    {% else %}
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Song Title</th>
+                <th>Artist</th>
+                <th>Year</th>
+                <th>Lyrics</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for song in page_obj %}
+                <tr>
+                    <td>{{ song.song_title }}</td>
+                    <td>{{ song.artist }}</td>
+                    <td>{{ song.year }}</td>
+                    <td>
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#lyricsModal{{ song.id }}">View Lyrics</button>
+                    </td>
+                </tr>
+
+                <div class="modal fade" id="lyricsModal{{ song.id }}" tabindex="-1" role="dialog" aria-labelledby="lyricsModalLabel{{ song.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="lyricsModalLabel{{ song.id }}">Lyrics for "{{ song.song_title }}"</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <pre class="pop-up">{{ song.lyrics|linebreaksbr }}</pre>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <pre class="pop-up">{{ song.lyrics|linebreaksbr }}</pre>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-            
-        {% endfor %}
-    </ul>
+            {% endfor %}
+        </tbody>
+    </table>
 
     <!-- Pagination -->
     <nav>
@@ -84,4 +97,6 @@
             });
         });
     </script>
+
+{% endif %}
 {% endblock %}
