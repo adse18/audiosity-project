@@ -5,9 +5,12 @@
 
 {% block content %}
 <h1>Lyrics Analysis</h1>
-<form method="GET" action="{% url 'lyrics_analysis' %}">
+<form method="GET" action="{% url 'lyrics_analysis' %}" onsubmit="showSpinner()">
     <input type="text" name="query" placeholder="Find similar lyrics to your text..." value="{{ request.GET.query }}" required>
     <button type="submit">Search</button>
+    <div id="spinner" class="spinner-border text-primary" role="status" style="display: none;">
+        <span class="sr-only">Loading...</span>
+    </div>
 </form>
 <p></p>
 <div>
@@ -34,4 +37,12 @@
     {% endif %}
 </div>
 
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function showSpinner() {
+        document.getElementById('spinner').style.display = 'inline-block';
+    }
+</script>
 {% endblock %}
