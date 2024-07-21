@@ -1,4 +1,3 @@
-<!-- archive.htlm -->
 {% extends 'base.html' %}
 {% load static %}
 
@@ -8,95 +7,69 @@
 {% block content %}
     <h1>Search Songs</h1>
     <form method="GET" action="{% url 'archive' %}">
-        <input type="text" name="q" placeholder="Search for songs..." value="{{ query }}" required>
+        <input type="text" name="q" placeholder="Search for songs..." value="{{ query }}">
         <button type="submit">Search</button>
     </form>
 
     {% if page_obj.paginator.count == 0 %}
-    <p></p>
-    <p><b>No results found.</b></p>
+        <p><b>No results found.</b></p>
     {% else %}
-
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Song Title</th>
-                <th>Artist</th>
-                <th>Year</th>
-                <th>Lyrics</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for song in page_obj %}
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>{{ song.song_title }}</td>
-                    <td>{{ song.artist }}</td>
-                    <td>{{ song.year }}</td>
-                    <td>
-                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#lyricsModal{{ song.id }}">View Lyrics</button>
-                    </td>
+                    <th>Song Title</th>
+                    <th>Artist</th>
+                    <th>Year</th>
+                    <th>Lyrics</th>
                 </tr>
+            </thead>
+            <tbody>
+                {% for song in page_obj %}
+                    <tr>
+                        <td>{{ song.title }}</td>
+                        <td>{{ song.artist }}</td>
+                        <td>{{ song.release_date.year }}</td>
+                        <td>
+                            <!-- Remove the modal button and modal code since we no longer use song.id -->
+                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#lyricsModal">View Lyrics</button>
+                        </td>
+                    </tr>
 
-                <div class="modal fade" id="lyricsModal{{ song.id }}" tabindex="-1" role="dialog" aria-labelledby="lyricsModalLabel{{ song.id }}" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="lyricsModalLabel{{ song.id }}">Lyrics for "{{ song.song_title }}"</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <pre class="pop-up">{{ song.lyrics|linebreaksbr }}</pre>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <div class="modal fade" id="lyricsModal" tabindex="-1" role="dialog" aria-labelledby="lyricsModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="lyricsModalLabel">Lyrics for "{{ song.title }}"</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <pre class="pop-up">{{ song.lyrics|linebreaksbr }}</pre>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-        </tbody>
-    </table>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <!-- Pagination -->
-    <nav>
-        <ul class="pagination">
-            {% if page_obj.has_previous %}
-                <li class="page-item"><a class="page-link" href="?q={{ query }}&page=1">&laquo; first</a></li>
-                <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}">previous</a></li>
-            {% endif %}
-            <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
-            {% if page_obj.has_next %}
-                <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}">next</a></li>
-                <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-
-    <!-- JavaScript for displaying lyrics in modal -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var songLinks = document.querySelectorAll(".song-title");
-
-            songLinks.forEach(function(link) {
-                link.addEventListener("click", function(event) {
-                    event.preventDefault();
-                    var songId = this.getAttribute("data-song-id");
-                    var songTitle = this.getAttribute("data-song-title");
-                    var artist = this.getAttribute("data-artist");
-                    var lyrics = this.getAttribute("data-lyrics");
-
-                    var modal = document.getElementById("lyricsModal" + songId);
-                    modal.querySelector(".modal-title").innerText = "Lyrics for " + songTitle;
-                    modal.querySelector(".modal-body pre").innerText = lyrics;
-
-                    var bootstrapModal = new bootstrap.Modal(modal);
-                    bootstrapModal.show();
-                });
-            });
-        });
-    </script>
-
-{% endif %}
+        <!-- Pagination -->
+        <nav>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?q={{ query }}&page=1">&laquo; first</a></li>
+                    <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}">previous</a></li>
+                {% endif %}
+                <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}">next</a></li>
+                    <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
 {% endblock %}
