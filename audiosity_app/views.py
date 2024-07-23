@@ -14,6 +14,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.http import HttpResponse
 from django.urls import reverse
+from .forms import UploadFileForm
 
 root_path = settings.BASE_DIR
 
@@ -86,19 +87,10 @@ def lyrics_analysis(request):
     return render(request, 'lyrics_analysis.html', ctx)
 
 def upload_image(request):
-    image_url = None
-    if request.method == 'POST' and request.FILES.get('image'):
-        uploaded_file = request.FILES['image']
-        # Save the file
-        file_name = default_storage.save(uploaded_file.name, uploaded_file)
-        image_url = default_storage.url(file_name)
-    
-    return render(request, 'image2lyrics.html', {'image_url': image_url})
-
-def process_image(request):
-    if request.method == 'POST':
-        image_url = request.POST.get('image_url')
-        # Add your image processing logic here
-        # For example, you could redirect to another page or display processing results
-        
-    return render(request, 'image2lyrics.html', {'image_url': image_url})
+    if request.method == "POST":
+        form = UploadFileForm(request.POST, request.FILES)
+        file = request.FILES['file']
+        return HttpResponse("the name of the uploaded file is " + str(file))
+    else:
+        form = UploadFileForm()
+    return render(request, 'image2lyrics.html', {'form': form})
