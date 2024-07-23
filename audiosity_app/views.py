@@ -58,7 +58,7 @@ def lyrics_analysis(request):
 
     embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
-    db = FAISS.load_local(os.path.join(root_path, "audiosity_app/vector_db_lyrics"), embedding, allow_dangerous_deserialization=True)
+    db = FAISS.load_local(os.path.join(root_path, "audiosity_app/vector_db_lyrics_all_songs"), embedding, allow_dangerous_deserialization=True)
 
     docs = db.similarity_search(query,k=5)
 
