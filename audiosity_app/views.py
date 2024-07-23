@@ -47,7 +47,6 @@ def archive(request):
     paginator = Paginator(songs, 20)  # Show 20 songs per page.
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-
     return render(request, 'archive.html', {'page_obj': page_obj, 'query': query})
 
 def lyrics_analysis(request):
