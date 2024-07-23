@@ -1104,14 +1104,10 @@ def create_ui():
     interfaces = [
         (txt2img_interface, "txt2img", "txt2img"),
         (img2img_interface, "img2img", "img2img"),
-        (extras_interface, "Extras", "extras"),
-        (pnginfo_interface, "PNG Info", "pnginfo"),
-        (modelmerger_ui.blocks, "Checkpoint Merger", "modelmerger"),
-        (train_interface, "Train", "train"),
     ]
 
     interfaces += script_callbacks.ui_tabs_callback()
-    interfaces += [(settings.interface, "Settings", "settings")]
+    #interfaces += [(settings.interface, "Settings", "settings")]
 
     extensions_interface = ui_extensions.create_ui()
     interfaces += [(extensions_interface, "Extensions", "extensions")]
@@ -1121,7 +1117,7 @@ def create_ui():
         shared.tab_names.append(label)
 
     with gr.Blocks(theme=shared.gradio_theme, analytics_enabled=False, title="Stable Diffusion") as demo:
-        settings.add_quicksettings()
+        #settings.add_quicksettings()
 
         parameters_copypaste.connect_paste_params_buttons()
 
@@ -1149,13 +1145,13 @@ def create_ui():
         footer = footer.format(versions=versions_html(), api_docs="/docs" if shared.cmd_opts.api else "https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/API")
         gr.HTML(footer, elem_id="footer")
 
-        settings.add_functionality(demo)
+        #settings.add_functionality(demo)
 
         update_image_cfg_scale_visibility = lambda: gr.update(visible=shared.sd_model and shared.sd_model.cond_stage_key == "edit")
-        settings.text_settings.change(fn=update_image_cfg_scale_visibility, inputs=[], outputs=[image_cfg_scale])
+        #settings.text_settings.change(fn=update_image_cfg_scale_visibility, inputs=[], outputs=[image_cfg_scale])
         demo.load(fn=update_image_cfg_scale_visibility, inputs=[], outputs=[image_cfg_scale])
 
-        modelmerger_ui.setup_ui(dummy_component=dummy_component, sd_model_checkpoint_component=settings.component_dict['sd_model_checkpoint'])
+        #modelmerger_ui.setup_ui(dummy_component=dummy_component, sd_model_checkpoint_component=settings.component_dict['sd_model_checkpoint'])
 
     if ui_settings_from_file != loadsave.ui_settings:
         loadsave.dump_defaults()
