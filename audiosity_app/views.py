@@ -1,6 +1,6 @@
 from .models import Song
 from django.core.paginator import Paginator
-
+from .lyrics_processing import processing
 from langchain_huggingface import HuggingFaceEmbeddings
 #from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
@@ -75,7 +75,8 @@ def lyrics_analysis(request):
 
     #categs = Category.objects.all()[1:5]
 
-    print(result_docs[0])
+    result_docs = processing(query,result_docs)
+    print(result_docs)
 
     ctx = {
     #    'categories':categs,
