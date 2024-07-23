@@ -10,10 +10,11 @@ from django.conf import settings
 from django.db.models import Q
 
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from .forms import ImageForm
 from django.shortcuts import get_object_or_404, redirect
+from Image_2_text.image_2_text import generate_blip_caption
 
 root_path = settings.BASE_DIR
 
@@ -101,14 +102,14 @@ def image2lyrics(request):
     return render(request, 'image2lyrics.html', {'form': form, 'img_obj': img_obj})
 
 def process_image(request, img_id):
-    """Verarbeitet das Bild und leitet auf die Seite zur Anzeige des Bildes weiter."""
+    """Verarbeitet das Bild und gibt die Bildunterschrift als JSON zurück."""
     img_obj = get_object_or_404(Image, id=img_id)
     
-    # Hier kommt deine Logik zur Bildverarbeitung
-    # Zum Beispiel: process_image_logic(img_obj)
+    # Rufe die Bildverarbeitungsfunktion auf
+    caption = generate_blip_caption(img_obj.image.path)
     
-    # Leite nach der Verarbeitung auf die Seite zum Anzeigen des Bildes weiter
-    return redirect('processing', img_id=img_id)
+    # Gibt die Bildunterschrift als JSON zurück
+    return HttpResponse(caption, content_type='text/plain')
 
 def processing(request, img_id):
     """Zeigt das verarbeitete Bild an."""

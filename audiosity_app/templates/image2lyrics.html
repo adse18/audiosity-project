@@ -14,12 +14,47 @@
 
 {% if img_obj %}
     <h3>Successfully uploaded: {{ img_obj.title }}</h3>
-    <img class="img-fluid" src="{{ img_obj.image.url }}" alt="Uploaded Image" style="max-height:300px;">
-    <p></p>
+    <img src="{{ img_obj.image.url }}" alt="Uploaded Image" style="max-height:300px;">
+    
+    <button id="processButton" data-img-id="{{ img_obj.id }}">Process</button>
+    
+    <div id="captionContainer"></div>
 
-        <!-- Process Button -->
-    <form method="post" action="{% url 'process_image' img_obj.id %}">
-        {% csrf_token %}
-        <button type="submit">Process</button>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('processButton').addEventListener('click', function() {
+                const imgId = this.getAttribute('data-img-id');
+                processImage(imgId);
+            });
+        });
+
+        function processImage(imgId) {
+            // Disable the button to prevent multiple submissions
+            const button = document.getElementById('processButton');
+            button.disabled = true;
+            button.textContent = 'Processing...';
+    
+            // Send an AJAX request to process the image
+            fetch(`/process_image/${imgId}/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'text/html',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.text()) // Expect plain text response
+            .then(caption => {
+                // Display the caption
+                document.getElementById('captionContainer').textContent = caption;
+    
+                // Hide the process button
+                button.style.display = 'none';
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        }
+    </script>
+    
 {% endif %}
 {% endblock %}
