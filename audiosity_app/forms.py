@@ -1,4 +1,8 @@
 from django import forms
+from .models import Image
 
-class UploadFileForm(forms.Form):
-    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple':False}))
+class ImageForm(forms.ModelForm):
+    """Form for the image model"""
+    class Meta:
+        model = Image
+        fields = ('title', 'image')

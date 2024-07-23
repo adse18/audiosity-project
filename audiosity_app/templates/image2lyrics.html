@@ -3,15 +3,23 @@
 {% block title %}Image zu Bild{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Image zu Text</h1>
-<p class="mb-4">Create images perfectly fitting to your text. Upload an image to see the result.</p>
-<form action="{%url 'image2lyrics'%}" method="post" enctype="multipart/form-data">
-    {%csrf_token %}
-    <p>
-        {{form.file}}
-    </p>
-    <p><input type="submit" value="Upload"></p>
-</form>
-{% endif %}
+<h1>Image zu Text</h1>
+<p>Create images perfectly fitting to your text. Upload an image to see the result.</p>
 
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Upload</button>
+</form>
+
+{% if img_obj %}
+    <h3>Successfully uploaded: {{ img_obj.title }}</h3>
+    <img class="img-fluid" src="{{ img_obj.image.url }}" alt="Uploaded Image" style="max-height:300px;">
+    <p></p>
+
+        <!-- Process Button -->
+    <form method="post" action="{% url 'process_image' img_obj.id %}">
+        {% csrf_token %}
+        <button type="submit">Process</button>
+{% endif %}
 {% endblock %}

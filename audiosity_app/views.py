@@ -1,4 +1,4 @@
-from .models import Song
+from .models import Song, Image
 from django.core.paginator import Paginator
 from .lyrics_processing import processing
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -9,12 +9,11 @@ import os
 from django.conf import settings
 from django.db.models import Q
 
-from django.shortcuts import render, redirect
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
+from django.shortcuts import render
 from django.http import HttpResponse
 from django.urls import reverse
-from .forms import UploadFileForm
+from .forms import ImageForm
+from django.shortcuts import get_object_or_404, redirect
 
 root_path = settings.BASE_DIR
 
@@ -29,9 +28,6 @@ def lyrics_analysis(request):
 
 def lyrics2image(request):
     return render(request, 'lyrics2image.html')
-
-def image2lyrics(request):
-    return render(request, 'image2lyrics.html')
 
 def archive(request):
     query = request.GET.get('q', '')
@@ -86,11 +82,36 @@ def lyrics_analysis(request):
 
     return render(request, 'lyrics_analysis.html', ctx)
 
-def upload_image(request):
-    if request.method == "POST":
-        form = UploadFileForm(request.POST, request.FILES)
-        file = request.FILES['file']
-        return HttpResponse("the name of the uploaded file is " + str(file))
+def image2lyrics(request):
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Speichere das Bild
+            form.save()
+            # Hole das neueste Bildobjekt, um es im Template anzuzeigen
+            img_obj = form.instance
+            # Redirect zur selben Seite, um ein erneutes Absenden des Formulars beim Aktualisieren zu verhindern
+            return render(request, 'image2lyrics.html', {'form': form, 'img_obj': img_obj})
     else:
-        form = UploadFileForm()
-    return render(request, 'image2lyrics.html', {'form': form})
+        form = ImageForm()
+    
+    # Hole das neueste Bildobjekt, um es im Template anzuzeigen (falls vorhanden)
+    img_obj = None
+
+    return render(request, 'image2lyrics.html', {'form': form, 'img_obj': img_obj})
+
+def process_image(request, img_id):
+    """Verarbeitet das Bild und leitet auf die Seite zur Anzeige des Bildes weiter."""
+    img_obj = get_object_or_404(Image, id=img_id)
+    
+    # Hier kommt deine Logik zur Bildverarbeitung
+    # Zum Beispiel: process_image_logic(img_obj)
+    
+    # Leite nach der Verarbeitung auf die Seite zum Anzeigen des Bildes weiter
+    return redirect('processing', img_id=img_id)
+
+def processing(request, img_id):
+    """Zeigt das verarbeitete Bild an."""
+    img_obj = get_object_or_404(Image, id=img_id)
+    
+    return render(request, 'processing.html', {'img_obj': img_obj})
