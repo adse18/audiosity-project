@@ -1,9 +1,52 @@
-<!-- image2lyrics.html -->
 {% extends 'base.html' %}
 
 {% block title %}Image zu Bild{% endblock %}
 
 {% block content %}
-<h1>Image zu Text</h1>
-<p>Create Images perfectly fitting to your text.</p>
+<h1 class="mb-4">Image zu Text</h1>
+<p class="mb-4">Create images perfectly fitting to your text. Upload an image to see the result.</p>
+
+<!-- Image upload form -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Upload an Image</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" action="{% url 'upload_image' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="image">Select an Image:</label>
+                            <input type="file" name="image" id="image" accept="image/*" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Upload Image</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if image_url %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="alert alert-success" role="alert">
+                    <h4 class="alert-heading">Image Uploaded Successfully!</h4>
+                    <p>Your image has been uploaded. You can view it below:</p>
+                    <img src="{{ image_url }}" alt="Uploaded Image" class="img-fluid">
+                    <!-- Process Button -->
+                    <form method="POST" action="{% url 'process_image' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="image_url" value="{{ image_url }}">
+                        <button type="submit" class="btn btn-success mt-3">Process Image</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
 {% endblock %}

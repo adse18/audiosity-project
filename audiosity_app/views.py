@@ -1,5 +1,3 @@
-from django.shortcuts import render
-from django.http import HttpResponse
 from .models import Song
 from django.core.paginator import Paginator
 
@@ -10,6 +8,12 @@ from langchain_community.vectorstores import FAISS
 import os
 from django.conf import settings
 from django.db.models import Q
+
+from django.shortcuts import render, redirect
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from django.http import HttpResponse
+from django.urls import reverse
 
 root_path = settings.BASE_DIR
 
@@ -79,3 +83,21 @@ def lyrics_analysis(request):
     }
 
     return render(request, 'lyrics_analysis.html', ctx)
+
+def upload_image(request):
+    image_url = None
+    if request.method == 'POST' and request.FILES.get('image'):
+        uploaded_file = request.FILES['image']
+        # Save the file
+        file_name = default_storage.save(uploaded_file.name, uploaded_file)
+        image_url = default_storage.url(file_name)
+    
+    return render(request, 'image2lyrics.html', {'image_url': image_url})
+
+def process_image(request):
+    if request.method == 'POST':
+        image_url = request.POST.get('image_url')
+        # Add your image processing logic here
+        # For example, you could redirect to another page or display processing results
+        
+    return render(request, 'image2lyrics.html', {'image_url': image_url})
