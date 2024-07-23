@@ -1,30 +1,56 @@
-<!-- base.html -->
 {% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Audiosity{% endblock %}</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional custom CSS -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <!-- Favicon einbinden -->
+    <!-- Favicon -->
     <link rel="icon" href="{% static 'img/sound-wave.png' %}" type="image/png">
 </head>
 <body>
-    <div class="navbar">
-        <a class="active" href="{% url 'home' %}">Home</a>
-        <a href="{% url 'lyrics_analysis' %}">Lyrics Analyse</a>
-        <a href="{% url 'lyrics2image' %}">Lyrics zu Bild</a>
-        <a href="{% url 'image2lyrics' %}">Bild zu Lyrics</a>
-        <a href="{% url 'archive' %}">Archive</a>
-    </div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'home' %}">Audiosity</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lyrics_analysis' %}">Lyrics Analysis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lyrics2image' %}">Lyrics to Image</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'image2lyrics' %}">Image to Lyrics</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'archive' %}">Archive</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
+    <!-- Main Content -->
     <div class="container mt-4">
         {% block content %}
         {% endblock %}
     </div>
 
+    <!-- Footer (Optional) -->
+    <footer class="bg-light py-3 mt-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2024 Audiosity App. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.5.3/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
