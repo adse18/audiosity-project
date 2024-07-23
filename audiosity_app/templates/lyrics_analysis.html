@@ -25,11 +25,17 @@
             </thead>
             <tbody>
                 {% for result in results %}
-                    <tr>
-                        <td>{{ result.source.0 }} | {{ result.source.1 }}</td>
-                        <td>{{ result.content }}</td>
-                    </tr>
-                {% endfor %}
+                <tr>
+                    <td>{{ result.source.0 }} | {{ result.source.1 }}</td>
+                    <td>
+                        {% for line in result.content %}
+                            {% with line_index=forloop.counter0 %}
+                                <p {% if line_index|add:"-1" in result.matches %}class="highlighted-lyric"{% endif %}> {{ line }}</p>
+                            {% endwith %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     {% else %}
@@ -38,6 +44,12 @@
 </div>
 
 {% endblock %}
+
+<style>
+    .highlighted-lyric {
+        background-color: yellow; /* Or a more subtle highlight color */
+    }
+</style>
 
 {% block extra_js %}
 <script>
