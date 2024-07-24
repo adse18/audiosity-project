@@ -22,6 +22,8 @@ def chunking(lyrics):
     stripped[0] = re.sub(r'.*?Lyrics', "", stripped[0])
     stripped[-1] = re.sub(r'You might also likeEmbed$', "", stripped[-1])
     stripped[-1] = re.sub(r'\d+Embed$', "", stripped[-1])
+    stripped[-1] = re.sub(r'Embed', "", stripped[-1])
+
     return stripped
 
 
