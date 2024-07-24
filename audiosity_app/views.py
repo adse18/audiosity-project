@@ -65,8 +65,9 @@ def lyrics_analysis(request):
                 'content': x.page_content
             })
             result_docs.append(temp)
-
         result_docs = lyrics_processing(query, result_docs)
+        print(result_docs)
+
 
     ctx = {
         'results': result_docs

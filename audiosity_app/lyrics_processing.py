@@ -11,6 +11,7 @@ model = SentenceTransformer("all-MiniLM-L6-v2")
 def chunking(lyrics):
     # remove start of song artifacts
     stripped = re.sub(r'.*?Contributors.*?\[.*?\]', '', lyrics)
+    stripped = re.sub(r'.*\d+ Contributor',"", stripped)
     # remove song structure comments
     stripped = re.sub(r'\[.*?\]', '', stripped)
     # split song texts into lines by splitting at newline characters
@@ -18,6 +19,8 @@ def chunking(lyrics):
     # removing empty entries
     stripped = [line for line in stripped if line.strip()]
     # remove end of song artifacts
+    stripped[0] = re.sub(r'.*?Lyrics', "", stripped[0])
+    stripped[-1] = re.sub(r'You might also likeEmbed$', "", stripped[-1])
     stripped[-1] = re.sub(r'\d+Embed$', "", stripped[-1])
     return stripped
 

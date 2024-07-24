@@ -31,13 +31,15 @@
                     <td>
                         {% for line in result.content %}
                             {% with line_index=forloop.counter0 %}
-                                <p {% if line_index|add:"-1" in result.matches %}class="highlighted-lyric"{% endif %}> {{ line }}</p>
-                            {% endwith %}
+                                <p {% if line_index in result.matches %}class="bg-warning"{% endif %}>
+                                    {{ line }} <!-- Debug line to print line index and content -->
+                                </p>
+                            {% endwith %} 
                         {% endfor %}
                     </td>
                 </tr>
-                {% endfor %}
-            </tbody>
+            {% endfor %}
+                    
         </table>
     {% else %}
         <div class="alert alert-info" role="alert">
@@ -50,12 +52,6 @@
 
 {% block extra_css %}
 <style>
-    .highlighted-lyric {
-        background-color: #f8f9fa; /* Light gray background for highlight */
-        padding: 0.5rem;
-        border-radius: 0.25rem;
-    }
-
     .spinner-border {
         width: 1.5rem;
         height: 1.5rem;
