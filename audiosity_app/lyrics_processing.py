@@ -26,8 +26,6 @@ def chunking(lyrics):
 
     return stripped
 
-
-
 def cosine_similarity(x, y):
     
     # Ensure length of x and y are the same
@@ -45,7 +43,6 @@ def cosine_similarity(x, y):
     cosine_similarity = dot_product / (magnitude_x * magnitude_y)
     
     return cosine_similarity
-
 
 def find_matches(df, input_phrase):
     input_vector = model.encode(input_phrase)
@@ -77,7 +74,6 @@ def find_matches(df, input_phrase):
         df.at[index, "matches"] = top_indices
     
     return df
-
 
 def lyrics_processing(query, songs):
     df_songs = pd.DataFrame(songs)

@@ -2,19 +2,15 @@ from .models import Song, Image
 from django.core.paginator import Paginator
 from .lyrics_processing import lyrics_processing
 from langchain_huggingface import HuggingFaceEmbeddings
-#from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-
 import os
 from django.conf import settings
 from django.db.models import Q
-
-from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from .forms import ImageForm
-from django.shortcuts import get_object_or_404, redirect
-from utils.image_2_text import generate_blip_caption
+from django.shortcuts import get_object_or_404, redirect, render
+from audiosity_app.utils.image_2_text import generate_blip_caption
 import json
 from django.views.decorators.csrf import csrf_exempt
 

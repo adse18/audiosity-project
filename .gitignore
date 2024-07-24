@@ -1,4 +1,5 @@
 __pycache__
+/audiosity_app/__pycache__
 media/
 
 *.ckpt
