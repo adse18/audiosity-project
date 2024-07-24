@@ -1,21 +1,22 @@
-<!-- lyrics_analysis.html -->
 {% extends 'base.html' %}
 
 {% block title %}Lyrics Analysis{% endblock %}
 
 {% block content %}
-<h1>Lyrics Analysis</h1>
+<h1 class="mb-4">Lyrics Analysis</h1>
 <form method="GET" action="{% url 'lyrics_analysis' %}" onsubmit="showSpinner()">
-    <input type="text" name="query" placeholder="Find similar lyrics to your text..." value="{{ request.GET.query }}" required>
-    <button type="submit">Search</button>
-    <div id="spinner" class="spinner-border text-primary" role="status" style="display: none;">
+    <div class="form-group">
+        <input type="text" name="query" class="form-control" placeholder="Find similar lyrics to your text..." value="{{ request.GET.query }}" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+    <div id="spinner" class="spinner-border text-primary ml-2" role="status" style="display: none;">
         <span class="sr-only">Loading...</span>
     </div>
 </form>
 <p></p>
 <div>
     {% if results %}
-        <h2>Search Results:</h2>
+        <h3>Search Results:</h3>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -35,21 +36,33 @@
                         {% endfor %}
                     </td>
                 </tr>
-            {% endfor %}
+                {% endfor %}
             </tbody>
         </table>
     {% else %}
-        <p>No results found.</p>
+        <div class="alert alert-info" role="alert">
+            No results found. Try adjusting your query.
+        </div>
     {% endif %}
 </div>
 
 {% endblock %}
 
+{% block extra_css %}
 <style>
     .highlighted-lyric {
-        background-color: yellow; /* Or a more subtle highlight color */
+        background-color: #f8f9fa; /* Light gray background for highlight */
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+    }
+
+    .spinner-border {
+        width: 1.5rem;
+        height: 1.5rem;
+        border-width: 0.25rem;
     }
 </style>
+{% endblock %}
 
 {% block extra_js %}
 <script>

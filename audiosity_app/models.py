@@ -44,3 +44,9 @@ class Song(models.Model):
     @writers_list.setter
     def writers_list(self, value):
         self.writers = json.dumps(value)
+
+class Image(models.Model):
+    image = models.ImageField(upload_to='images/')
+    
+    def __str__(self):
+        return f"Image {self.id}"
