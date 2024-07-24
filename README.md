@@ -18,4 +18,11 @@ Audiosity Project provides a unique and immersive way to interact with music, of
 
 ## installation / use
 
-To run the Audiosity WebApp, you need 
+To run the Audiosity WebApp from the command line, you need to simply start the Django server like this:
+```
+python manage.py runserver
+```
+
+The first run might take a while longer as the image generator first installs all the necessary models and dependencies first in order to run.
+
+Please be advised that 10gb of storage and a GPU are recommended to run this app.
