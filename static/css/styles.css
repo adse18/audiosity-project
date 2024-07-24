@@ -1,0 +1,19 @@
+/* Background container styles */
+.background-container {
+    background-image: url('../img/background-image.png'); /* Path to your background image */
+    background-size: cover; /* Cover the entire container */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    height: 100vh; /* Set the height to the viewport height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.text-box {
+    background: rgba(80, 228, 75, 0.7); /* Light transparent background */
+    color: white; /* White text color */
+    padding: 20px;
+    border-radius: 10px;
+}
