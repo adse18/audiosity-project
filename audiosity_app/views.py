@@ -1,6 +1,6 @@
 from .models import Song, Image
 from django.core.paginator import Paginator
-from .lyrics_processing import processing
+from .lyrics_processing import lyrics_processing
 from langchain_huggingface import HuggingFaceEmbeddings
 #from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
@@ -50,36 +50,27 @@ def archive(request):
     return render(request, 'archive.html', {'page_obj': page_obj, 'query': query})
 
 def lyrics_analysis(request):
-
     query = request.GET.get('query', '')
-
-    print(query)
-
-    embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-
-    db = FAISS.load_local(os.path.join(root_path, "audiosity_app/vector_db_lyrics_all_songs"), embedding, allow_dangerous_deserialization=True)
-
-    docs = db.similarity_search(query,k=5)
-
-    print(docs[0])
-
     result_docs = []
 
-    for x in docs:
-        temp = dict({'source':x.metadata['source'],
-                     'content':x.page_content})
-        result_docs.append(temp)
+    # Only load the vector store and perform the search if a query is provided
+    if query:
+        embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+        db = FAISS.load_local(os.path.join(root_path, "audiosity_app/vector_db_lyrics_all_songs"), embedding, allow_dangerous_deserialization=True)
+        docs = db.similarity_search(query, k=5)
+        
+        for x in docs:
+            temp = dict({
+                'source': x.metadata['source'],
+                'content': x.page_content
+            })
+            result_docs.append(temp)
 
-    #categs = Category.objects.all()[1:5]
-
-    result_docs = processing(query,result_docs)
-    print(result_docs)
+        result_docs = lyrics_processing(query, result_docs)
 
     ctx = {
-    #    'categories':categs,
-        'results':result_docs
+        'results': result_docs
     }
-
     return render(request, 'lyrics_analysis.html', ctx)
 
 def image2lyrics(request):

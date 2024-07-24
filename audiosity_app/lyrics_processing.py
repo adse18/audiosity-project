@@ -43,36 +43,39 @@ def cosine_similarity(x, y):
 
 
 def find_matches(df, input_phrase):
-
     input_vector = model.encode(input_phrase)
-    print('Mauer')
-    print(df)
+    print('Processing DataFrame for matches...')
+    
+    # Iterate over DataFrame rows
     for index, row in df.iterrows():
         chunks = row["content"]
-        print(chunks)
-        embeddings = model.encode(chunks, normalize_embeddings=True)    
-        similarities = []
-        for i in embeddings:
-            similarities.append(cosine_similarity(input_vector, i))
-            
-
-        max_similarity_index = similarities.index(max(similarities))  # Find index of max similarity
-        most_similar_line = chunks[max_similarity_index]  # Get the corresponding line
-        print(index, row)
-        print("Most similar line:", most_similar_line)
-        print("Cosine similarity:", max(similarities))
-
-        top_n = 3  
+        print("Processing row:", index)
+        print("Chunks:", chunks)
+        
+        # Encode chunks and compute similarities
+        embeddings = model.encode(chunks, normalize_embeddings=True)
+        similarities = [cosine_similarity(input_vector, emb) for emb in embeddings]
+        
+        # Check if similarities list is non-empty
+        if not similarities:
+            continue
+        
+        # Find top N matches
+        top_n = 3
         top_indices = heapq.nlargest(top_n, range(len(similarities)), key=similarities.__getitem__)
-        print(top_indices)
+        
+        # Ensure the 'matches' column exists
+        if 'matches' not in df.columns:
+            df['matches'] = pd.Series(index=df.index, dtype='object')
+        
+        # Assign top_indices to the 'matches' column
         df.at[index, "matches"] = top_indices
+    
     return df
 
 
-def processing(query, songs):
+def lyrics_processing(query, songs):
     df_songs = pd.DataFrame(songs)
     df_songs["content"] = df_songs["content"].apply(chunking)   
     output = find_matches(df_songs, query).to_dict(orient='records')
     return output
-
-
