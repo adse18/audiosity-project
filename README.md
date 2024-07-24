@@ -29,6 +29,8 @@ Please be advised that 10gb of storage and a GPU are recommended to run this app
 
 ## Credits for the Stable Diffusion UI
 
+based on: https://github.com/AUTOMATIC1111/stable-diffusion-webui
+
 Licenses for borrowed code can be found in `Settings -> Licenses` screen, and also in `html/licenses.html` file.
 
 - Stable Diffusion - https://github.com/Stability-AI/stablediffusion, https://github.com/CompVis/taming-transformers
