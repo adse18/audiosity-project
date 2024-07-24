@@ -14,7 +14,7 @@ from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from .forms import ImageForm
 from django.shortcuts import get_object_or_404, redirect
-from Image_2_text.image_2_text import generate_blip_caption
+from utils.image_2_text import generate_blip_caption
 import json
 from django.views.decorators.csrf import csrf_exempt
 
@@ -121,7 +121,7 @@ def search_lyrics(request):
         
         if docs:
             doc = docs[0]
-            title, artist = doc.metadata['source']  # Extract title and artist from the tuple
+            title, artist = doc.metadata['source'] 
             result = f"{title} by: {artist}"
             return JsonResponse({'result': result})
         
