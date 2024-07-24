@@ -16,9 +16,9 @@ Audiosity Project provides a unique and immersive way to interact with music, of
 
 ## installation / use
 
-First of all, import the listed requirements and make sure you are using Python 3.10. 
+First of all, import the listed requirements and make sure you are using **Python 3.10**. 
 
-To run the Audiosity WebApp from the command line, you need to simply start the Django server like this:
+To run the Audiosity WebApp from the command line, you need to navigate into the project folder and then simply start the Django server with this command:
 ```
 python manage.py runserver
 ```
