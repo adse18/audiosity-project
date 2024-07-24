@@ -1,11 +1,9 @@
 # Audiosity Project
 
-vAudiosity Project is a multifaceted application designed to analyze and explore music in various creative ways.
+Audiosity Project is a multifaceted application designed to analyze and explore music in various creative ways.
+## Lyrics Analysis
 
-## Top 100 US-Charts Analysis
-
-With this app, users can delve into the top 100 US-Charts from 1959 to 2023, examining lyrics for similarities over the decades. This feature offers insights into the evolution of popular music themes and trends.
-
+Query our lyrics database with any prompt. Tell in what mood or situation you currently are and Audiosity will return a song lyrics from our database that perfectly mirrors feelings.
 ## Image Generation from Lyrics
 
 Another exciting feature of the Audiosity Project is the ability to generate images based on song lyrics. Users can transform lyrical content into visually captivating representations, adding a new dimension to their music listening experience.
