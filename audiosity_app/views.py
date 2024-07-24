@@ -15,6 +15,8 @@ from django.urls import reverse
 from .forms import ImageForm
 from django.shortcuts import get_object_or_404, redirect
 from Image_2_text.image_2_text import generate_blip_caption
+import json
+from django.views.decorators.csrf import csrf_exempt
 
 root_path = settings.BASE_DIR
 
@@ -66,8 +68,6 @@ def lyrics_analysis(request):
             })
             result_docs.append(temp)
         result_docs = lyrics_processing(query, result_docs)
-        print(result_docs)
-
 
     ctx = {
         'results': result_docs
@@ -107,3 +107,24 @@ def processing(request, img_id):
     img_obj = get_object_or_404(Image, id=img_id)
     
     return render(request, 'processing.html', {'img_obj': img_obj})
+
+@csrf_exempt
+def search_lyrics(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        query = data.get('caption', '')
+        result_docs = []
+        
+        embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+        db = FAISS.load_local(os.path.join(root_path, "audiosity_app/vector_db_lyrics_all_songs"), embedding, allow_dangerous_deserialization=True)
+        docs = db.similarity_search(query, k=1)
+        
+        if docs:
+            doc = docs[0]
+            title, artist = doc.metadata['source']  # Extract title and artist from the tuple
+            result = f"{title} by: {artist}"
+            return JsonResponse({'result': result})
+        
+        return JsonResponse({'result': 'No results found'})
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)

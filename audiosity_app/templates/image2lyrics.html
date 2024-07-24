@@ -1,24 +1,44 @@
 {% extends 'base.html' %}
 
-{% block title %}Image zu Bild{% endblock %}
+{% block title %}Image to Lyrics{% endblock %}
 
 {% block content %}
-<h1>Image zu Text</h1>
-<p>Auf dieser Seite können Sie sich eine Bildbeschreibung für Ihr Foto generieren lassen.</p>
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Upload</button>
-</form>
+<div class="container my-5">
+    <h1 class="text-center">Image to Lyrics</h1>
+    <p class="text-center">Upload your own photo and receive a song that has the perfect lyrics for your photo</p>
 
-{% if img_obj %}
-    <h3>Successfully uploaded: {{ img_obj.title }}</h3>
-    <img src="{{ img_obj.image.url }}" alt="Uploaded Image" style="max-height:300px;">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form class="form-control" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-block mt-3">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
     
-    <button id="processButton" data-img-id="{{ img_obj.id }}">Process</button>
-    
-    <div id="captionContainer"></div>
+    {% if img_obj %}
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6 text-center">
+            <div class="alert alert-success mt-5">
+                Successfully uploaded! {{ img_obj.title }}
+            </div>
+            <div>
+                <img src="{{ img_obj.image.url }}" alt="Uploaded Image" class="img-fluid mt-4" style="max-height:300px;">
+            </div>
+            <div class="d-grid">
+                <button class="btn btn-primary btn-block mt-3" id="processButton" data-img-id="{{ img_obj.id }}">Process</button>
+            </div>
+
+            <div id="captionContainer" class="p-3 border rounded bg-light text-dark mb-4" style="margin-top: 20px;"></div>
+            <div id="lyricsContainer" class="p-3 border rounded bg-light text-dark"></div>
+        </div>
+    </div>
+    {% endif %}
+</div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -29,12 +49,10 @@
         });
 
         function processImage(imgId) {
-            // Disable the button to prevent multiple submissions
             const button = document.getElementById('processButton');
             button.disabled = true;
             button.textContent = 'Processing...';
     
-            // Send an AJAX request to process the image
             fetch(`/process_image/${imgId}/`, {
                 method: 'GET',
                 headers: {
@@ -42,13 +60,29 @@
                     'X-CSRFToken': '{{ csrf_token }}'
                 }
             })
-            .then(response => response.text()) // Expect plain text response
+            .then(response => response.text())
             .then(caption => {
-                // Display the caption
-                document.getElementById('captionContainer').textContent = caption;
-    
-                // Hide the process button
+                document.getElementById('captionContainer').innerHTML = '<p><strong>Image description:</strong> ' + caption + '</p>';
                 button.style.display = 'none';
+                furtherProcessCaption(caption); // Call further processing with the caption
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        }
+
+        function furtherProcessCaption(caption) {
+            fetch('/search_lyrics/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ caption: caption })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('lyricsContainer').innerHTML = '<p><strong>Recommended title: </strong> ' + data.result + '</p>';
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
@@ -56,5 +90,4 @@
         }
     </script>
     
-{% endif %}
 {% endblock %}

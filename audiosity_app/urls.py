@@ -12,5 +12,6 @@ urlpatterns = [
     path('archive/', views.archive, name='archive'),
     path('process_image/<int:img_id>/', views.process_image, name='process_image'),
     path('processing/<int:img_id>/', views.processing, name='processing'),
+    path('search_lyrics/', views.search_lyrics, name='search_lyrics'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

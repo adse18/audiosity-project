@@ -38,10 +38,12 @@
     </nav>
 
     <!-- Main Content -->
+    {% block main-content %}
     <div class="container mt-4">
         {% block content %}
         {% endblock %}
     </div>
+    {% endblock %}
 
     <!-- Footer (Optional) -->
     <footer class="bg-light py-3 mt-4">
